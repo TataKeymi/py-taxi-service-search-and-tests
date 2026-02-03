@@ -23,9 +23,9 @@ class PrivateCarTest(TestCase):
         self.client.force_login(self.user)
 
     def test_retrieve_cars(self):
-        manufacturer = Manufacturer(name="test")
-        Car(model="test first", manufacturer=manufacturer)
-        Car(model="test second", manufacturer=manufacturer)
+        manufacturer = Manufacturer.objects.create(name="test")
+        Car.objects.create(model="test first", manufacturer=manufacturer)
+        Car.objects.create(model="test second", manufacturer=manufacturer)
         response = self.client.get(CAR_URL)
         self.assertEqual(response.status_code, 200)
 
@@ -53,8 +53,8 @@ class PrivateManufacturerTest(TestCase):
         self.client.force_login(self.user)
 
     def test_retrieve_manufacturers(self):
-        Manufacturer(name="test first")
-        Manufacturer(name="test second")
+        Manufacturer.objects.create(name="test first")
+        Manufacturer.objects.create(name="test second")
         response = self.client.get(MANUFACTURER_URL)
         self.assertEqual(response.status_code, 200)
 
@@ -84,14 +84,14 @@ class PrivateDriverTest(TestCase):
         self.client.force_login(self.user)
 
     def test_retrieve_drivers(self):
-        Driver(
+        Driver.objects.create(
             username="test_first_user",
             password="test123",
             first_name="test_first_name",
             last_name="test_last_name",
             license_number="Test123",
         )
-        Driver(
+        Driver.objects.create(
             username="test_second_user",
             password="test123",
             first_name="test_first_name",
@@ -123,8 +123,6 @@ class PrivateDriverTest(TestCase):
         }
         self.client.post(reverse("taxi:driver-create"), data=form_data)
         new_user = get_user_model().objects.get(username=form_data["username"])
-
-        print(get_user_model().objects.all())
 
         self.assertEqual(new_user.first_name, form_data["first_name"])
         self.assertEqual(new_user.last_name, form_data["last_name"])

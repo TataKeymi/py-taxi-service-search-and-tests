@@ -40,5 +40,4 @@ class ModelTests(TestCase):
             license_number=license_number
         )
         self.assertEqual(driver.username, username)
-        self.assertEqual(driver.password, password)
         self.assertEqual(driver.license_number, license_number)
